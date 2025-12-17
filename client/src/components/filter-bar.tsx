@@ -1,17 +1,28 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, X } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export type TimeFilter = "All" | "7 Days" | "Month" | "Year";
+export type RoleFilter = "All" | "Teacher" | "Student";
 
 interface FilterBarProps {
   search: string;
   setSearch: (val: string) => void;
   timeFilter: TimeFilter;
   setTimeFilter: (val: TimeFilter) => void;
+  roleFilter: RoleFilter;
+  setRoleFilter: (val: RoleFilter) => void;
 }
 
-export function FilterBar({ search, setSearch, timeFilter, setTimeFilter }: FilterBarProps) {
+export function FilterBar({ 
+  search, 
+  setSearch, 
+  timeFilter, 
+  setTimeFilter,
+  roleFilter,
+  setRoleFilter
+}: FilterBarProps) {
   const filters: TimeFilter[] = ["All", "7 Days", "Month", "Year"];
 
   return (
@@ -34,22 +45,37 @@ export function FilterBar({ search, setSearch, timeFilter, setTimeFilter }: Filt
         )}
       </div>
 
-      <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-        {filters.map((filter) => (
-          <Button
-            key={filter}
-            variant={timeFilter === filter ? "default" : "outline"}
-            size="sm"
-            onClick={() => setTimeFilter(filter)}
-            className={`whitespace-nowrap transition-all ${
-              timeFilter === filter 
-                ? "bg-primary text-primary-foreground shadow-md" 
-                : "bg-transparent hover:bg-primary/5 border-primary/10 text-muted-foreground"
-            }`}
-          >
-            {filter === "All" ? "All Time" : `Last ${filter}`}
-          </Button>
-        ))}
+      <div className="flex gap-4 w-full md:w-auto items-center overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+         <Select value={roleFilter} onValueChange={(val) => setRoleFilter(val as RoleFilter)}>
+          <SelectTrigger className="w-[140px] bg-background/50 border-primary/10">
+            <SelectValue placeholder="Filter by Role" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="All">All Roles</SelectItem>
+            <SelectItem value="Teacher">Teachers Only</SelectItem>
+            <SelectItem value="Student">Students Only</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <div className="h-6 w-px bg-border hidden md:block" />
+
+        <div className="flex gap-2">
+          {filters.map((filter) => (
+            <Button
+              key={filter}
+              variant={timeFilter === filter ? "default" : "outline"}
+              size="sm"
+              onClick={() => setTimeFilter(filter)}
+              className={`whitespace-nowrap transition-all ${
+                timeFilter === filter 
+                  ? "bg-primary text-primary-foreground shadow-md" 
+                  : "bg-transparent hover:bg-primary/5 border-primary/10 text-muted-foreground"
+              }`}
+            >
+              {filter === "All" ? "All Time" : `Last ${filter}`}
+            </Button>
+          ))}
+        </div>
       </div>
     </div>
   );

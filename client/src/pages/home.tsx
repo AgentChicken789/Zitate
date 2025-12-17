@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Quote } from "@/types/quote";
 import { QuoteCard } from "@/components/quote-card";
 import { QuoteForm } from "@/components/quote-form";
-import { FilterBar, TimeFilter } from "@/components/filter-bar";
+import { FilterBar, TimeFilter, RoleFilter } from "@/components/filter-bar";
 import { nanoid } from "nanoid";
 import { subDays, subMonths, subYears, isAfter } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
@@ -34,6 +34,7 @@ export default function Home() {
 
   const [search, setSearch] = useState("");
   const [timeFilter, setTimeFilter] = useState<TimeFilter>("All");
+  const [roleFilter, setRoleFilter] = useState<RoleFilter>("All");
 
   useEffect(() => {
     localStorage.setItem("class-quotes", JSON.stringify(quotes));
@@ -50,6 +51,11 @@ export default function Home() {
 
   const filteredQuotes = useMemo(() => {
     return quotes.filter((quote) => {
+      // Role Filter
+      if (roleFilter !== "All" && quote.type !== roleFilter) {
+        return false;
+      }
+
       // Search Filter
       const searchLower = search.toLowerCase();
       const matchesSearch = 
@@ -73,7 +79,7 @@ export default function Home() {
           return true;
       }
     }).sort((a, b) => b.timestamp - a.timestamp); // Sort Newest First
-  }, [quotes, search, timeFilter]);
+  }, [quotes, search, timeFilter, roleFilter]);
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20">
@@ -103,7 +109,9 @@ export default function Home() {
             search={search} 
             setSearch={setSearch} 
             timeFilter={timeFilter} 
-            setTimeFilter={setTimeFilter} 
+            setTimeFilter={setTimeFilter}
+            roleFilter={roleFilter}
+            setRoleFilter={setRoleFilter}
           />
         </section>
 
