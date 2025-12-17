@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1",
+    "name": "Herr Müller",
+    "text": "Geschichte besteht nicht nur aus Daten und Namen, sie ist der Klatsch der Vergangenheit.",
+    "type": "Teacher",
+    "timestamp": 1702800000000
+  },
+  {
+    "id": "2",
+    "name": "Sarah Jenkins",
+    "text": "Können wir heute bitte draußen Unterricht machen? Die Sonne ruft förmlich meinen Namen.",
+    "type": "Student",
+    "timestamp": 1702886400000
+  }
+]
