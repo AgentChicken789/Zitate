@@ -1,4 +1,4 @@
-import { Quote } from "@/types/quote";
+import type { Quote } from "@shared/schema";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ export function QuoteCard({ quote, index, isAdmin, onDelete }: QuoteCardProps) {
           ? "border-l-primary bg-teacher/30" 
           : "border-l-student-foreground bg-student/30"
       }`}>
-        <CardHeader className="pb-2 flex flex-row items-start justify-between space-y-0">
+        <CardHeader className="pb-2 flex flex-row items-start justify-between gap-2 space-y-0">
           <Badge 
             variant="outline" 
             className={`${
@@ -49,6 +49,7 @@ export function QuoteCard({ quote, index, isAdmin, onDelete }: QuoteCardProps) {
                 size="icon"
                 className="h-8 w-8 text-muted-foreground hover:text-destructive transition-colors"
                 onClick={() => onDelete(quote.id)}
+                data-testid={`button-delete-quote-${quote.id}`}
               >
                 <Trash2 className="w-4 h-4" />
                 <span className="sr-only">Löschen</span>
@@ -58,13 +59,13 @@ export function QuoteCard({ quote, index, isAdmin, onDelete }: QuoteCardProps) {
           </div>
         </CardHeader>
         <CardContent className="pb-4">
-          <blockquote className="font-quote text-lg leading-relaxed text-foreground italic">
+          <blockquote className="font-quote text-lg leading-relaxed text-foreground italic" data-testid={`text-quote-${quote.id}`}>
             "{quote.text}"
           </blockquote>
         </CardContent>
-        <CardFooter className="pt-0 flex justify-between items-center text-sm text-muted-foreground">
-          <span className="font-semibold font-sans text-foreground/80">— {quote.name}</span>
-          <time dateTime={new Date(quote.timestamp).toISOString()}>
+        <CardFooter className="pt-0 flex flex-wrap justify-between items-center gap-2 text-sm text-muted-foreground">
+          <span className="font-semibold font-sans text-foreground/80" data-testid={`text-author-${quote.id}`}>— {quote.name}</span>
+          <time dateTime={new Date(quote.timestamp).toISOString()} data-testid={`text-date-${quote.id}`}>
             {format(new Date(quote.timestamp), "d. MMM yyyy", { locale: de })}
           </time>
         </CardFooter>

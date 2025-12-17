@@ -1,114 +1,86 @@
-import { useState, useEffect, useMemo } from "react";
-import { Quote } from "@/types/quote";
+import { useState, useMemo } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient, apiRequest } from "@/lib/queryClient";
+import type { Quote } from "@shared/schema";
 import { QuoteCard } from "@/components/quote-card";
 import { QuoteForm } from "@/components/quote-form";
 import { FilterBar, TimeFilter, RoleFilter } from "@/components/filter-bar";
 import { AdminLogin } from "@/components/admin-login";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { nanoid } from "nanoid";
 import { subDays, subMonths, subYears, isAfter } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import { GraduationCap } from "lucide-react";
-
+import { Spinner } from "@/components/ui/spinner";
 import { useToast } from "@/hooks/use-toast";
-
-// Mock data for initial load if empty
-const INITIAL_QUOTES: Quote[] = [
-  {
-    id: "1",
-    name: "Herr Müller",
-    text: "Geschichte besteht nicht nur aus Daten und Namen, sie ist der Klatsch der Vergangenheit.",
-    type: "Teacher",
-    timestamp: Date.now() - 100000000,
-  },
-  {
-    id: "2",
-    name: "Sarah Jenkins",
-    text: "Können wir heute bitte draußen Unterricht machen? Die Sonne ruft förmlich meinen Namen.",
-    type: "Student",
-    timestamp: Date.now() - 50000000,
-  }
-];
 
 export default function Home() {
   const { toast } = useToast();
-  const [quotes, setQuotes] = useState<Quote[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadQuotes = async () => {
-      try {
-        // 1. Fetch from file
-        const response = await fetch("/quotes.json");
-        const fileQuotes: Quote[] = await response.json();
-
-        // 2. Get local overrides/additions
-        const localData = localStorage.getItem("class-quotes");
-        let localQuotes: Quote[] = localData ? JSON.parse(localData) : [];
-
-        // 3. Combine file quotes with local quotes
-        // We prioritize local storage if it has data, but if it's empty (first visit),
-        // we start with the file.
-        // If the user has added quotes locally, they will be in localQuotes.
-        // We want to make sure we don't lose the file quotes if they aren't in local storage yet.
-        
-        if (localQuotes.length === 0) {
-           setQuotes(fileQuotes);
-        } else {
-           // Basic merge strategy: Use local storage as the source of truth for now
-           // since it contains user changes. 
-           // Ideally we would merge unique IDs but for a simple prototype, 
-           // respecting local persistence is key.
-           setQuotes(localQuotes);
-        }
-      } catch (error) {
-        console.error("Failed to load quotes", error);
-        // Fallback to local storage only if file fetch fails
-        const localData = localStorage.getItem("class-quotes");
-        if (localData) {
-          setQuotes(JSON.parse(localData));
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadQuotes();
-  }, []);
-
   const [isAdmin, setIsAdmin] = useState(false);
   const [search, setSearch] = useState("");
   const [timeFilter, setTimeFilter] = useState<TimeFilter>("All");
   const [roleFilter, setRoleFilter] = useState<RoleFilter>("All");
 
-  useEffect(() => {
-    localStorage.setItem("class-quotes", JSON.stringify(quotes));
-  }, [quotes]);
+  const { data: quotes = [], isLoading } = useQuery<Quote[]>({
+    queryKey: ["/api/quotes"],
+  });
+
+  const createQuoteMutation = useMutation({
+    mutationFn: async (data: Omit<Quote, "id">) => {
+      return await apiRequest("POST", "/api/quotes", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/quotes"] });
+      toast({
+        title: "Zitat hinzugefügt",
+        description: "Dein Zitat wurde erfolgreich gespeichert.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Fehler",
+        description: "Das Zitat konnte nicht gespeichert werden.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteQuoteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await apiRequest("DELETE", `/api/quotes/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/quotes"] });
+      toast({
+        title: "Zitat gelöscht",
+        description: "Das Zitat wurde erfolgreich entfernt.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Fehler",
+        description: "Das Zitat konnte nicht gelöscht werden.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleAddQuote = (data: Omit<Quote, "id" | "timestamp">) => {
-    const newQuote: Quote = {
+    createQuoteMutation.mutate({
       ...data,
-      id: nanoid(),
       timestamp: Date.now(),
-    };
-    setQuotes((prev) => [newQuote, ...prev]);
+    });
   };
 
   const handleDeleteQuote = (id: string) => {
-    setQuotes((prev) => prev.filter((q) => q.id !== id));
-    toast({
-      title: "Zitat gelöscht",
-      description: "Das Zitat wurde erfolgreich entfernt.",
-    });
+    deleteQuoteMutation.mutate(id);
   };
 
   const filteredQuotes = useMemo(() => {
     return quotes.filter((quote) => {
-      // Role Filter
       if (roleFilter !== "All" && quote.type !== roleFilter) {
         return false;
       }
 
-      // Search Filter
       const searchLower = search.toLowerCase();
       const matchesSearch = 
         quote.name.toLowerCase().includes(searchLower) || 
@@ -116,7 +88,6 @@ export default function Home() {
 
       if (!matchesSearch) return false;
 
-      // Time Filter
       const date = new Date(quote.timestamp);
       const now = new Date();
       
@@ -130,12 +101,11 @@ export default function Home() {
         default:
           return true;
       }
-    }).sort((a, b) => b.timestamp - a.timestamp); // Sort Newest First
+    }).sort((a, b) => b.timestamp - a.timestamp);
   }, [quotes, search, timeFilter, roleFilter]);
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20">
-      {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -155,7 +125,6 @@ export default function Home() {
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
-        {/* Submission Section - Only visible to Admins */}
         <AnimatePresence>
           {isAdmin && (
             <motion.section 
@@ -169,7 +138,6 @@ export default function Home() {
           )}
         </AnimatePresence>
 
-        {/* Filters */}
         <section>
           <FilterBar 
             search={search} 
@@ -181,9 +149,12 @@ export default function Home() {
           />
         </section>
 
-        {/* Quotes Grid */}
         <section>
-          {filteredQuotes.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center py-20">
+              <Spinner className="w-8 h-8" />
+            </div>
+          ) : filteredQuotes.length > 0 ? (
             <motion.div 
               layout
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"

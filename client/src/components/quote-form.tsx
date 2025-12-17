@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Quote } from "@/types/quote";
+import type { Quote } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -9,8 +9,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Send, PenLine } from "lucide-react";
-import { useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name muss mindestens 2 Zeichen lang sein."),
@@ -23,8 +21,6 @@ interface QuoteFormProps {
 }
 
 export function QuoteForm({ onSubmit }: QuoteFormProps) {
-  const { toast } = useToast();
-  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,28 +33,7 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
   function handleSubmit(values: z.infer<typeof formSchema>) {
     onSubmit(values);
     form.reset();
-    toast({
-      title: "Zitat hinzugefügt",
-      description: "Dein Zitat wurde erfolgreich gespeichert.",
-    });
   }
-
-  // Auto-save draft functionality
-  const values = form.watch();
-  useEffect(() => {
-    localStorage.setItem("quote-form-draft", JSON.stringify(values));
-  }, [values]);
-
-  // Load draft on mount
-  useEffect(() => {
-    const draft = localStorage.getItem("quote-form-draft");
-    if (draft) {
-      try {
-        const parsed = JSON.parse(draft);
-      } catch (e) {}
-    }
-  }, []);
-
 
   return (
     <Card className="border-t-4 border-t-primary shadow-lg bg-card/50 backdrop-blur-sm">
@@ -82,7 +57,7 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Wer hat es gesagt?" {...field} />
+                      <Input placeholder="Wer hat es gesagt?" {...field} data-testid="input-quote-name" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -96,7 +71,7 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
                     <FormLabel>Rolle</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger data-testid="select-quote-type">
                           <SelectValue placeholder="Rolle auswählen" />
                         </SelectTrigger>
                       </FormControl>
@@ -120,14 +95,15 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
                     <Textarea 
                       placeholder="Was wurde gesagt?" 
                       className="min-h-[100px] resize-none text-lg font-quote" 
-                      {...field} 
+                      {...field}
+                      data-testid="textarea-quote-text"
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full md:w-auto font-semibold">
+            <Button type="submit" className="w-full md:w-auto font-semibold" data-testid="button-submit-quote">
               <Send className="w-4 h-4 mr-2" />
               Zitat hinzufügen
             </Button>
