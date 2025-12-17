@@ -17,6 +17,9 @@ export const insertUserSchema = createInsertSchema(users).pick({
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 
+export const quoteTypeEnum = z.enum(["Teacher", "Student", "None"]);
+export type QuoteType = z.infer<typeof quoteTypeEnum>;
+
 export const quotes = pgTable("quotes", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
@@ -27,7 +30,16 @@ export const quotes = pgTable("quotes", {
 
 export const insertQuoteSchema = createInsertSchema(quotes).omit({
   id: true,
+}).extend({
+  type: quoteTypeEnum.default("None"),
+});
+
+export const updateQuoteSchema = z.object({
+  name: z.string().min(1).optional(),
+  text: z.string().min(1).optional(),
+  type: quoteTypeEnum.optional(),
 });
 
 export type InsertQuote = z.infer<typeof insertQuoteSchema>;
+export type UpdateQuote = z.infer<typeof updateQuoteSchema>;
 export type Quote = typeof quotes.$inferSelect;

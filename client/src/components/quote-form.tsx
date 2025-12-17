@@ -13,7 +13,7 @@ import { Send, PenLine } from "lucide-react";
 const formSchema = z.object({
   name: z.string().min(2, "Name muss mindestens 2 Zeichen lang sein."),
   text: z.string().min(5, "Zitat muss mindestens 5 Zeichen lang sein."),
-  type: z.enum(["Teacher", "Student"]),
+  type: z.enum(["Teacher", "Student", "None"]),
 });
 
 interface QuoteFormProps {
@@ -26,7 +26,7 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
     defaultValues: {
       name: "",
       text: "",
-      type: "Student",
+      type: "None",
     },
   });
 
@@ -76,6 +76,7 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="None">Keine</SelectItem>
                         <SelectItem value="Student">Schüler</SelectItem>
                         <SelectItem value="Teacher">Lehrer</SelectItem>
                       </SelectContent>

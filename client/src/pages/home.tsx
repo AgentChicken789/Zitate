@@ -64,6 +64,26 @@ export default function Home() {
     },
   });
 
+  const editQuoteMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: { name?: string; text?: string; type?: string } }) => {
+      return await apiRequest("PATCH", `/api/quotes/${id}`, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/quotes"] });
+      toast({
+        title: "Zitat bearbeitet",
+        description: "Das Zitat wurde erfolgreich aktualisiert.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Fehler",
+        description: "Das Zitat konnte nicht bearbeitet werden.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleAddQuote = (data: Omit<Quote, "id" | "timestamp">) => {
     createQuoteMutation.mutate({
       ...data,
@@ -73,6 +93,10 @@ export default function Home() {
 
   const handleDeleteQuote = (id: string) => {
     deleteQuoteMutation.mutate(id);
+  };
+
+  const handleEditQuote = (id: string, data: { name?: string; text?: string; type?: string }) => {
+    editQuoteMutation.mutate({ id, data });
   };
 
   const filteredQuotes = useMemo(() => {
@@ -167,6 +191,7 @@ export default function Home() {
                     index={index}
                     isAdmin={isAdmin}
                     onDelete={handleDeleteQuote}
+                    onEdit={handleEditQuote}
                   />
                 ))}
               </AnimatePresence>

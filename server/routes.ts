@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertQuoteSchema } from "@shared/schema";
+import { insertQuoteSchema, updateQuoteSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 
 export async function registerRoutes(
@@ -31,6 +31,29 @@ export async function registerRoutes(
       res.status(201).json(quote);
     } catch (error) {
       res.status(500).json({ error: "Failed to create quote" });
+    }
+  });
+
+  app.patch("/api/quotes/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const result = updateQuoteSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        return res.status(400).json({ 
+          error: fromZodError(result.error).toString() 
+        });
+      }
+
+      const quote = await storage.updateQuote(id, result.data);
+      
+      if (!quote) {
+        return res.status(404).json({ error: "Quote not found" });
+      }
+      
+      res.json(quote);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update quote" });
     }
   });
 

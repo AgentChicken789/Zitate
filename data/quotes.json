@@ -1,0 +1,16 @@
+[
+  {
+    "id": "15f9230c-6fc6-40bc-bce1-87300a734762",
+    "name": "Herr Müller",
+    "text": "Geschichte besteht nicht nur aus Daten und Namen, sie ist der Klatsch der Vergangenheit.",
+    "type": "Teacher",
+    "timestamp": 1765869070127
+  },
+  {
+    "id": "fcb7ade3-54dd-495a-b8e1-ec8788ce9178",
+    "name": "Sarah Jenkins",
+    "text": "Können wir heute bitte draußen Unterricht machen? Die Sonne ruft förmlich meinen Namen.",
+    "type": "Student",
+    "timestamp": 1765919070127
+  }
+]

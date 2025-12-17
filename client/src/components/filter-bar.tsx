@@ -4,7 +4,7 @@ import { Search, X } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export type TimeFilter = "All" | "7 Days" | "Month" | "Year";
-export type RoleFilter = "All" | "Teacher" | "Student";
+export type RoleFilter = "All" | "Teacher" | "Student" | "None";
 
 interface FilterBarProps {
   search: string;
@@ -64,6 +64,7 @@ export function FilterBar({
             <SelectItem value="All">Alle Rollen</SelectItem>
             <SelectItem value="Teacher">Nur Lehrer</SelectItem>
             <SelectItem value="Student">Nur Schüler</SelectItem>
+            <SelectItem value="None">Ohne Rolle</SelectItem>
           </SelectContent>
         </Select>
 
