@@ -3,6 +3,7 @@ import { Quote } from "@/types/quote";
 import { QuoteCard } from "@/components/quote-card";
 import { QuoteForm } from "@/components/quote-form";
 import { FilterBar, TimeFilter, RoleFilter } from "@/components/filter-bar";
+import { AdminLogin } from "@/components/admin-login";
 import { nanoid } from "nanoid";
 import { subDays, subMonths, subYears, isAfter } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,6 +33,7 @@ export default function Home() {
     return saved ? JSON.parse(saved) : INITIAL_QUOTES;
   });
 
+  const [isAdmin, setIsAdmin] = useState(false);
   const [search, setSearch] = useState("");
   const [timeFilter, setTimeFilter] = useState<TimeFilter>("All");
   const [roleFilter, setRoleFilter] = useState<RoleFilter>("All");
@@ -94,14 +96,25 @@ export default function Home() {
               ClassQuotes
             </h1>
           </div>
+          
+          <AdminLogin isAdmin={isAdmin} onLogin={setIsAdmin} />
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
-        {/* Submission Section */}
-        <section className="w-full max-w-2xl mx-auto">
-          <QuoteForm onSubmit={handleAddQuote} />
-        </section>
+        {/* Submission Section - Only visible to Admins */}
+        <AnimatePresence>
+          {isAdmin && (
+            <motion.section 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="w-full max-w-2xl mx-auto overflow-hidden"
+            >
+              <QuoteForm onSubmit={handleAddQuote} />
+            </motion.section>
+          )}
+        </AnimatePresence>
 
         {/* Filters */}
         <section>
@@ -131,7 +144,7 @@ export default function Home() {
           ) : (
             <div className="text-center py-20 text-muted-foreground bg-card/30 rounded-xl border border-dashed border-border">
               <p className="text-lg">No quotes found matching your criteria.</p>
-              <p className="text-sm mt-2">Try adjusting your filters or add a new quote.</p>
+              <p className="text-sm mt-2">Try adjusting your filters.</p>
             </div>
           )}
         </section>
