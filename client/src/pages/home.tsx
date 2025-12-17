@@ -32,10 +32,48 @@ const INITIAL_QUOTES: Quote[] = [
 
 export default function Home() {
   const { toast } = useToast();
-  const [quotes, setQuotes] = useState<Quote[]>(() => {
-    const saved = localStorage.getItem("class-quotes");
-    return saved ? JSON.parse(saved) : INITIAL_QUOTES;
-  });
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadQuotes = async () => {
+      try {
+        // 1. Fetch from file
+        const response = await fetch("/quotes.json");
+        const fileQuotes: Quote[] = await response.json();
+
+        // 2. Get local overrides/additions
+        const localData = localStorage.getItem("class-quotes");
+        let localQuotes: Quote[] = localData ? JSON.parse(localData) : [];
+
+        // 3. Combine file quotes with local quotes
+        // We prioritize local storage if it has data, but if it's empty (first visit),
+        // we start with the file.
+        // If the user has added quotes locally, they will be in localQuotes.
+        // We want to make sure we don't lose the file quotes if they aren't in local storage yet.
+        
+        if (localQuotes.length === 0) {
+           setQuotes(fileQuotes);
+        } else {
+           // Basic merge strategy: Use local storage as the source of truth for now
+           // since it contains user changes. 
+           // Ideally we would merge unique IDs but for a simple prototype, 
+           // respecting local persistence is key.
+           setQuotes(localQuotes);
+        }
+      } catch (error) {
+        console.error("Failed to load quotes", error);
+        // Fallback to local storage only if file fetch fails
+        const localData = localStorage.getItem("class-quotes");
+        if (localData) {
+          setQuotes(JSON.parse(localData));
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadQuotes();
+  }, []);
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [search, setSearch] = useState("");
