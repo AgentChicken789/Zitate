@@ -27,7 +27,7 @@ export function AdminLogin({ isAdmin, onLogin }: AdminLoginProps) {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "admin") {
+    if (password === "10a") {
       onLogin(true);
       setIsOpen(false);
       setPassword("");
