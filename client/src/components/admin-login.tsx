@@ -39,7 +39,7 @@ export function AdminLogin({ isAdmin, onLogin }: AdminLoginProps) {
       toast({
         variant: "destructive",
         title: "Access Denied",
-        description: "Incorrect password. Try 'admin'.",
+        description: "Incorrect password.",
       });
     }
   };
@@ -93,8 +93,7 @@ export function AdminLogin({ isAdmin, onLogin }: AdminLoginProps) {
                 Admin Access
               </h2>
               <p className="text-sm text-muted-foreground">
-                Enter the admin password to add new quotes. <br/>
-                <span className="text-xs text-muted-foreground">(Hint: use "admin")</span>
+                Enter the admin password to add new quotes.
               </p>
             </div>
 
