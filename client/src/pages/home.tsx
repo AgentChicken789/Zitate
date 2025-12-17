@@ -4,6 +4,7 @@ import { QuoteCard } from "@/components/quote-card";
 import { QuoteForm } from "@/components/quote-form";
 import { FilterBar, TimeFilter, RoleFilter } from "@/components/filter-bar";
 import { AdminLogin } from "@/components/admin-login";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { nanoid } from "nanoid";
 import { subDays, subMonths, subYears, isAfter } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
@@ -97,7 +98,10 @@ export default function Home() {
             </h1>
           </div>
           
-          <AdminLogin isAdmin={isAdmin} onLogin={setIsAdmin} />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <AdminLogin isAdmin={isAdmin} onLogin={setIsAdmin} />
+          </div>
         </div>
       </header>
 
