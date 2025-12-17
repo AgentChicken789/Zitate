@@ -47,3 +47,5 @@ expertMode = true
 
 [userenv.shared]
 SUPABASE_DATABASE_URL = "postgresql://postgres:IchBinDumm789@db.znrkghgtfpygiawzivpt.supabase.co:5432/postgres"
+SUPABASE_URL = "https://znrkghgtfpygiawzivpt.supabase.co"
+SUPABASE_ANON_KEY = "sb_publishable_-R_iKeuupp0ByIUu2y9U-g_yPlQFyOj"
