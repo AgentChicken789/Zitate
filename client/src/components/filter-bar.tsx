@@ -25,6 +25,16 @@ export function FilterBar({
 }: FilterBarProps) {
   const filters: TimeFilter[] = ["All", "7 Days", "Month", "Year"];
 
+  const getFilterLabel = (filter: TimeFilter) => {
+    switch (filter) {
+      case "All": return "Gesamtzeit";
+      case "7 Days": return "Letzte 7 Tage";
+      case "Month": return "Letzter Monat";
+      case "Year": return "Letztes Jahr";
+      default: return filter;
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-card/40 p-4 rounded-xl border border-border/50 backdrop-blur-sm">
       <div className="relative w-full md:w-1/3">
@@ -32,7 +42,7 @@ export function FilterBar({
         <Input 
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search names or quotes..." 
+          placeholder="Namen oder Zitate suchen..." 
           className="pl-9 pr-9 bg-background/50 border-primary/10 focus-visible:ring-primary/20"
         />
         {search && (
@@ -47,13 +57,13 @@ export function FilterBar({
 
       <div className="flex gap-4 w-full md:w-auto items-center overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
          <Select value={roleFilter} onValueChange={(val) => setRoleFilter(val as RoleFilter)}>
-          <SelectTrigger className="w-[140px] bg-background/50 border-primary/10">
-            <SelectValue placeholder="Filter by Role" />
+          <SelectTrigger className="w-[160px] bg-background/50 border-primary/10">
+            <SelectValue placeholder="Nach Rolle filtern" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="All">All Roles</SelectItem>
-            <SelectItem value="Teacher">Teachers Only</SelectItem>
-            <SelectItem value="Student">Students Only</SelectItem>
+            <SelectItem value="All">Alle Rollen</SelectItem>
+            <SelectItem value="Teacher">Nur Lehrer</SelectItem>
+            <SelectItem value="Student">Nur Schüler</SelectItem>
           </SelectContent>
         </Select>
 
@@ -72,7 +82,7 @@ export function FilterBar({
                   : "bg-transparent hover:bg-primary/5 border-primary/10 text-muted-foreground"
               }`}
             >
-              {filter === "All" ? "All Time" : `Last ${filter}`}
+              {getFilterLabel(filter)}
             </Button>
           ))}
         </div>

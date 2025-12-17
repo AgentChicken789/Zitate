@@ -13,15 +13,15 @@ import { GraduationCap } from "lucide-react";
 const INITIAL_QUOTES: Quote[] = [
   {
     id: "1",
-    name: "Mr. Anderson",
-    text: "History is not just dates and names, it is the gossip of the past.",
+    name: "Herr Müller",
+    text: "Geschichte besteht nicht nur aus Daten und Namen, sie ist der Klatsch der Vergangenheit.",
     type: "Teacher",
     timestamp: Date.now() - 100000000,
   },
   {
     id: "2",
     name: "Sarah Jenkins",
-    text: "Can we please have class outside today? The sun is literally calling my name.",
+    text: "Können wir heute bitte draußen Unterricht machen? Die Sonne ruft förmlich meinen Namen.",
     type: "Student",
     timestamp: Date.now() - 50000000,
   }
@@ -93,7 +93,7 @@ export default function Home() {
               <GraduationCap className="w-5 h-5" />
             </div>
             <h1 className="text-xl font-serif font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              ClassQuotes
+              Klassenzitate
             </h1>
           </div>
           
@@ -143,8 +143,8 @@ export default function Home() {
             </motion.div>
           ) : (
             <div className="text-center py-20 text-muted-foreground bg-card/30 rounded-xl border border-dashed border-border">
-              <p className="text-lg">No quotes found matching your criteria.</p>
-              <p className="text-sm mt-2">Try adjusting your filters.</p>
+              <p className="text-lg">Keine Zitate gefunden, die deinen Kriterien entsprechen.</p>
+              <p className="text-sm mt-2">Versuche, deine Filter anzupassen.</p>
             </div>
           )}
         </section>

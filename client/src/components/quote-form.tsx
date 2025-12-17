@@ -13,8 +13,8 @@ import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters."),
-  text: z.string().min(5, "Quote must be at least 5 characters."),
+  name: z.string().min(2, "Name muss mindestens 2 Zeichen lang sein."),
+  text: z.string().min(5, "Zitat muss mindestens 5 Zeichen lang sein."),
   type: z.enum(["Teacher", "Student"]),
 });
 
@@ -38,13 +38,12 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
     onSubmit(values);
     form.reset();
     toast({
-      title: "Quote Added",
-      description: "Your quote has been successfully collected.",
+      title: "Zitat hinzugefügt",
+      description: "Dein Zitat wurde erfolgreich gespeichert.",
     });
   }
 
-  // Auto-save draft functionality (bonus feature for "Auto-save")
-  // We'll save the form state to localStorage as they type so they don't lose it
+  // Auto-save draft functionality
   const values = form.watch();
   useEffect(() => {
     localStorage.setItem("quote-form-draft", JSON.stringify(values));
@@ -56,11 +55,6 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
     if (draft) {
       try {
         const parsed = JSON.parse(draft);
-        // Only reset if form is pristine to avoid overwriting newer changes if we had more complex logic
-        // But for simplicity, we'll just leave it or could use form.reset(parsed)
-        // Let's not be too aggressive with auto-fill on reload for this specific prompt interpretation
-        // The prompt said "Auto-save timestamp on submit", which usually refers to the DATA model having a timestamp.
-        // But "Auto-save" usually implies draft saving. I'll stick to the timestamp requirement in the data model principally.
       } catch (e) {}
     }
   }, []);
@@ -71,10 +65,10 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-2xl">
           <PenLine className="w-6 h-6 text-primary" />
-          Submit a Quote
+          Zitat einreichen
         </CardTitle>
         <CardDescription>
-          Capture a memorable moment from class.
+          Halte einen unvergesslichen Moment aus dem Unterricht fest.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -88,7 +82,7 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Who said it?" {...field} />
+                      <Input placeholder="Wer hat es gesagt?" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -99,16 +93,16 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role</FormLabel>
+                    <FormLabel>Rolle</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select role" />
+                          <SelectValue placeholder="Rolle auswählen" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Student">Student</SelectItem>
-                        <SelectItem value="Teacher">Teacher</SelectItem>
+                        <SelectItem value="Student">Schüler</SelectItem>
+                        <SelectItem value="Teacher">Lehrer</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -121,10 +115,10 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
               name="text"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Quote</FormLabel>
+                  <FormLabel>Zitat</FormLabel>
                   <FormControl>
                     <Textarea 
-                      placeholder="What was said?" 
+                      placeholder="Was wurde gesagt?" 
                       className="min-h-[100px] resize-none text-lg font-quote" 
                       {...field} 
                     />
@@ -135,7 +129,7 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
             />
             <Button type="submit" className="w-full md:w-auto font-semibold">
               <Send className="w-4 h-4 mr-2" />
-              Add Quote
+              Zitat hinzufügen
             </Button>
           </form>
         </Form>

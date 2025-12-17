@@ -2,6 +2,7 @@ import { Quote } from "@/types/quote";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import { de } from "date-fns/locale";
 import { Quote as QuoteIcon, GraduationCap, School } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -34,7 +35,7 @@ export function QuoteCard({ quote, index }: QuoteCardProps) {
             }`}
           >
             {isTeacher ? <School className="w-3 h-3 mr-1" /> : <GraduationCap className="w-3 h-3 mr-1" />}
-            {quote.type}
+            {quote.type === "Teacher" ? "Lehrer" : "Schüler"}
           </Badge>
           <QuoteIcon className="w-8 h-8 text-muted-foreground/20" />
         </CardHeader>
@@ -46,7 +47,7 @@ export function QuoteCard({ quote, index }: QuoteCardProps) {
         <CardFooter className="pt-0 flex justify-between items-center text-sm text-muted-foreground">
           <span className="font-semibold font-sans text-foreground/80">— {quote.name}</span>
           <time dateTime={new Date(quote.timestamp).toISOString()}>
-            {format(new Date(quote.timestamp), "MMM d, yyyy")}
+            {format(new Date(quote.timestamp), "d. MMM yyyy", { locale: de })}
           </time>
         </CardFooter>
       </Card>

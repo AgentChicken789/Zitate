@@ -32,14 +32,14 @@ export function AdminLogin({ isAdmin, onLogin }: AdminLoginProps) {
       setIsOpen(false);
       setPassword("");
       toast({
-        title: "Admin Access Granted",
-        description: "You can now add and manage quotes.",
+        title: "Admin-Zugriff gewährt",
+        description: "Sie können jetzt Zitate hinzufügen und verwalten.",
       });
     } else {
       toast({
         variant: "destructive",
-        title: "Access Denied",
-        description: "Incorrect password.",
+        title: "Zugriff verweigert",
+        description: "Falsches Passwort.",
       });
     }
   };
@@ -47,8 +47,8 @@ export function AdminLogin({ isAdmin, onLogin }: AdminLoginProps) {
   const handleLogout = () => {
     onLogin(false);
     toast({
-      title: "Logged Out",
-      description: "Admin access has been revoked.",
+      title: "Abgemeldet",
+      description: "Admin-Zugriff wurde widerrufen.",
     });
   };
 
@@ -56,7 +56,7 @@ export function AdminLogin({ isAdmin, onLogin }: AdminLoginProps) {
     return (
       <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-destructive">
         <LogOut className="w-4 h-4 mr-2" />
-        Logout
+        Abmelden
       </Button>
     );
   }
@@ -70,7 +70,7 @@ export function AdminLogin({ isAdmin, onLogin }: AdminLoginProps) {
         className="text-muted-foreground hover:text-primary"
       >
         <Lock className="w-4 h-4 mr-2" />
-        Admin Login
+        Admin-Login
       </Button>
 
       {isOpen && createPortal(
@@ -84,33 +84,33 @@ export function AdminLogin({ isAdmin, onLogin }: AdminLoginProps) {
               className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
             >
               <X className="h-4 w-4" />
-              <span className="sr-only">Close</span>
+              <span className="sr-only">Schließen</span>
             </button>
             
             <div className="flex flex-col space-y-1.5 text-center sm:text-left mb-4">
               <h2 className="text-lg font-semibold leading-none tracking-tight flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-primary" />
-                Admin Access
+                Admin-Zugang
               </h2>
               <p className="text-sm text-muted-foreground">
-                Enter the admin password to add new quotes.
+                Geben Sie das Admin-Passwort ein, um neue Zitate hinzuzufügen.
               </p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Passwort</Label>
                 <Input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter password..."
+                  placeholder="Passwort eingeben..."
                   autoFocus
                 />
               </div>
               <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 pt-2">
-                <Button type="submit">Login</Button>
+                <Button type="submit">Anmelden</Button>
               </div>
             </form>
           </div>
