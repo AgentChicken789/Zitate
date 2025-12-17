@@ -1,16 +1,163 @@
 [
   {
-    "id": "15f9230c-6fc6-40bc-bce1-87300a734762",
-    "name": "Herr Müller",
-    "text": "Geschichte besteht nicht nur aus Daten und Namen, sie ist der Klatsch der Vergangenheit.",
+    "id": "b1b4c2e2-9a2f-4a9f-9f5c-0b7d8a3c1a01",
+    "name": "C. Lukas",
+    "text": "Ihr seid les problemes",
     "type": "Teacher",
-    "timestamp": 1765869070127
+    "timestamp": 1765964940000
   },
   {
-    "id": "fcb7ade3-54dd-495a-b8e1-ec8788ce9178",
-    "name": "Sarah Jenkins",
-    "text": "Können wir heute bitte draußen Unterricht machen? Die Sonne ruft förmlich meinen Namen.",
+    "id": "7d4d8d4a-7f41-4a6e-9f2c-52a1a7e6c102",
+    "name": "A. Kurkra",
+    "text": "Nachdem diese ganze Bumsbude hier aus Beton ist",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "c2f1c3a4-2f6c-4e6e-8c5f-9b2c8e7a4103",
+    "name": "A. Vogel",
+    "text": "Er kommt nicht mehr raus er ist zu groß",
     "type": "Student",
-    "timestamp": 1765919070127
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "eaa7b9e3-1b62-4c4f-b7c3-6a5c2c1e2104",
+    "name": "A. Kurka",
+    "text": "Ich finde Baby-Öl eigentlich ganz gut",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "1a6e0f6a-1f55-4e8f-9c2d-5b7a1e0d5105",
+    "name": "C. Sanchez",
+    "text": "I really don't understand that country (xy), they are really schizophrenic...",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "bde3a5d9-9c2c-41b3-9f77-61dcb7a3106",
+    "name": "G. Dietzte",
+    "text": "Dieser Spinner lebte von 1643-1727",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "8c6eae4a-48f4-4d9f-bb52-2b3e5d7c6107",
+    "name": "T. Gäbler",
+    "text": "Wenn du kleiner bist, ist dein Körpertiefpunkt höher",
+    "type": "Student",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "d3d2f4c7-5e6b-4a47-b6e2-93d64b1c2108",
+    "name": "Ohrt",
+    "text": "Did you really say: \"every Stunde\"",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "4f6d3f92-3c4a-4b87-b8a3-9a1d7cfe2109",
+    "name": "David",
+    "text": "Schreibt man Korrigieren mit zwei \"i\"?",
+    "type": "Student",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "6c8e5c8f-ec44-41d4-b2c7-3e4a1a2d2110",
+    "name": "Miss Sarizeybak",
+    "text": "Watch out for the round ones",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "fa9c8a64-2b75-4c7e-ae35-7e5a4c1b2111",
+    "name": "A. Kurka",
+    "text": "Du setzt dich darein (Amtsgericht) und schaukelst deine Eier",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "c3b1a6f9-8f1d-45b3-a1c6-7f2d1e9b2112",
+    "name": "A. Kurka",
+    "text": "Wer is schuld dran? Die Türken?",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "b8d5a0f2-7e8c-4c25-8a91-3f7e2a9c2113",
+    "name": "K. Scheppat",
+    "text": "Ich liebe es, wenn Ayleen mich spankt",
+    "type": "Student",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "9d2c6a4b-54a1-4d6c-9a8b-7c3f2e1d2114",
+    "name": "G. Dietzte",
+    "text": "Ihr seid sympathische Vollpfosten",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "3f7a1e9d-9a2b-4b7c-8c3d-1e5a6b2c2115",
+    "name": "J. Lemberg",
+    "text": "ChatGPT finde eine gute Formulierung für \"Die Stadt hat reingekackt\"",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "a5c3b1d2-6e4a-4f8a-9c7b-3e2a1d9f2116",
+    "name": "N. Hübler",
+    "text": "Mein Arsch ist beleuchtet",
+    "type": "Student",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "f3c8a5d7-4b2e-4c8f-a9d6-1b2c3e4f2117",
+    "name": "A. Ohrt",
+    "text": "My balls don't consist of cells",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "e1b2c3a4-5d6e-4f7a-8b9c-0a1b2c3d2118",
+    "name": "D. Schneyer",
+    "text": "Das beste beim Football sind die Cheerleader",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "c9b8a7d6-5e4f-4a3b-9c2d-1e0f9a8b2119",
+    "name": "D. Schneyer",
+    "text": "Hybrid-Bastard",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "7a6b5c4d-3e2f-4a1b-9c8d-7e6f5a4b2120",
+    "name": "J. Lemberg",
+    "text": "Suizid, ist immer eine gute Lösung",
+    "type": "Teacher",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "b4a3c2d1-0e9f-4a8b-7c6d-5e4f3a2b2121",
+    "name": "Dimi",
+    "text": "Bysosome ist doch ein Pokemon",
+    "type": "Student",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "1d2c3b4a-5e6f-4a7b-8c9d-0e1f2a3b2122",
+    "name": "N. Hübler",
+    "text": "2 von 16 ist doch 1/3",
+    "type": "Student",
+    "timestamp": 1765964940000
+  },
+  {
+    "id": "f1e2d3c4-b5a6-4f7e-8d9c-0b1a2c3d2123",
+    "name": "Hannes",
+    "text": "Ich muss das nega...",
+    "type": "Student",
+    "timestamp": 1765964940000
   }
 ]
