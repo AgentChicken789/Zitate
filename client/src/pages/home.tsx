@@ -10,6 +10,8 @@ import { subDays, subMonths, subYears, isAfter } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import { GraduationCap } from "lucide-react";
 
+import { useToast } from "@/hooks/use-toast";
+
 // Mock data for initial load if empty
 const INITIAL_QUOTES: Quote[] = [
   {
@@ -29,6 +31,7 @@ const INITIAL_QUOTES: Quote[] = [
 ];
 
 export default function Home() {
+  const { toast } = useToast();
   const [quotes, setQuotes] = useState<Quote[]>(() => {
     const saved = localStorage.getItem("class-quotes");
     return saved ? JSON.parse(saved) : INITIAL_QUOTES;
@@ -50,6 +53,14 @@ export default function Home() {
       timestamp: Date.now(),
     };
     setQuotes((prev) => [newQuote, ...prev]);
+  };
+
+  const handleDeleteQuote = (id: string) => {
+    setQuotes((prev) => prev.filter((q) => q.id !== id));
+    toast({
+      title: "Zitat gelöscht",
+      description: "Das Zitat wurde erfolgreich entfernt.",
+    });
   };
 
   const filteredQuotes = useMemo(() => {
@@ -141,7 +152,13 @@ export default function Home() {
             >
               <AnimatePresence>
                 {filteredQuotes.map((quote, index) => (
-                  <QuoteCard key={quote.id} quote={quote} index={index} />
+                  <QuoteCard 
+                    key={quote.id} 
+                    quote={quote} 
+                    index={index}
+                    isAdmin={isAdmin}
+                    onDelete={handleDeleteQuote}
+                  />
                 ))}
               </AnimatePresence>
             </motion.div>

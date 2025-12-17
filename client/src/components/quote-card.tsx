@@ -1,26 +1,30 @@
 import { Quote } from "@/types/quote";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
-import { Quote as QuoteIcon, GraduationCap, School } from "lucide-react";
+import { Quote as QuoteIcon, GraduationCap, School, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface QuoteCardProps {
   quote: Quote;
   index: number;
+  isAdmin?: boolean;
+  onDelete?: (id: string) => void;
 }
 
-export function QuoteCard({ quote, index }: QuoteCardProps) {
+export function QuoteCard({ quote, index, isAdmin, onDelete }: QuoteCardProps) {
   const isTeacher = quote.type === "Teacher";
   
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.3, delay: index * 0.05 }}
     >
-      <Card className={`h-full border-l-4 transition-all hover:shadow-md ${
+      <Card className={`h-full border-l-4 transition-all hover:shadow-md relative group ${
         isTeacher 
           ? "border-l-primary bg-teacher/30" 
           : "border-l-student-foreground bg-student/30"
@@ -37,7 +41,21 @@ export function QuoteCard({ quote, index }: QuoteCardProps) {
             {isTeacher ? <School className="w-3 h-3 mr-1" /> : <GraduationCap className="w-3 h-3 mr-1" />}
             {quote.type === "Teacher" ? "Lehrer" : "Schüler"}
           </Badge>
-          <QuoteIcon className="w-8 h-8 text-muted-foreground/20" />
+          
+          <div className="flex gap-2">
+            {isAdmin && onDelete && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => onDelete(quote.id)}
+              >
+                <Trash2 className="w-4 h-4" />
+                <span className="sr-only">Löschen</span>
+              </Button>
+            )}
+            <QuoteIcon className="w-8 h-8 text-muted-foreground/20" />
+          </div>
         </CardHeader>
         <CardContent className="pb-4">
           <blockquote className="font-quote text-lg leading-relaxed text-foreground italic">
