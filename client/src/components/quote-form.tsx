@@ -8,16 +8,22 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Send, PenLine } from "lucide-react";
+import { Send, PenLine, Calendar } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { de } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name muss mindestens 2 Zeichen lang sein."),
   text: z.string().min(5, "Zitat muss mindestens 5 Zeichen lang sein."),
   type: z.enum(["Teacher", "Student", "None"]),
+  date: z.date(),
 });
 
 interface QuoteFormProps {
-  onSubmit: (data: Omit<Quote, "id" | "timestamp">) => void;
+  onSubmit: (data: Omit<Quote, "id">) => void;
 }
 
 export function QuoteForm({ onSubmit }: QuoteFormProps) {
@@ -27,11 +33,17 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
       name: "",
       text: "",
       type: "None",
+      date: new Date(),
     },
   });
 
   function handleSubmit(values: z.infer<typeof formSchema>) {
-    onSubmit(values);
+    onSubmit({
+      name: values.name,
+      text: values.text,
+      type: values.type,
+      timestamp: values.date.getTime(),
+    });
     form.reset();
   }
 
@@ -49,7 +61,7 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -81,6 +93,47 @@ export function QuoteForm({ onSubmit }: QuoteFormProps) {
                         <SelectItem value="Teacher">Lehrer</SelectItem>
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Datum</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                            data-testid="button-quote-date"
+                          >
+                            {field.value ? (
+                              format(field.value, "d. MMM yyyy", { locale: de })
+                            ) : (
+                              <span>Datum wählen</span>
+                            )}
+                            <Calendar className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <CalendarComponent
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) => date > new Date()}
+                          locale={de}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}

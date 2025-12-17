@@ -65,7 +65,7 @@ export default function Home() {
   });
 
   const editQuoteMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: { name?: string; text?: string; type?: string } }) => {
+    mutationFn: async ({ id, data }: { id: string; data: { name?: string; text?: string; type?: string; timestamp?: number } }) => {
       return await apiRequest("PATCH", `/api/quotes/${id}`, data);
     },
     onSuccess: () => {
@@ -84,18 +84,15 @@ export default function Home() {
     },
   });
 
-  const handleAddQuote = (data: Omit<Quote, "id" | "timestamp">) => {
-    createQuoteMutation.mutate({
-      ...data,
-      timestamp: Date.now(),
-    });
+  const handleAddQuote = (data: Omit<Quote, "id">) => {
+    createQuoteMutation.mutate(data);
   };
 
   const handleDeleteQuote = (id: string) => {
     deleteQuoteMutation.mutate(id);
   };
 
-  const handleEditQuote = (id: string, data: { name?: string; text?: string; type?: string }) => {
+  const handleEditQuote = (id: string, data: { name?: string; text?: string; type?: string; timestamp?: number }) => {
     editQuoteMutation.mutate({ id, data });
   };
 

@@ -38,6 +38,7 @@ export const updateQuoteSchema = z.object({
   name: z.string().min(1).optional(),
   text: z.string().min(1).optional(),
   type: quoteTypeEnum.optional(),
+  timestamp: z.number().optional(),
 });
 
 export type InsertQuote = z.infer<typeof insertQuoteSchema>;

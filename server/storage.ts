@@ -90,6 +90,7 @@ export class SupabaseStorage implements IStorage {
     if (data.name !== undefined) updateData.name = data.name;
     if (data.text !== undefined) updateData.text = data.text;
     if (data.type !== undefined) updateData.type = data.type;
+    if (data.timestamp !== undefined) updateData.timestamp = data.timestamp;
 
     const { data: updatedQuote, error } = await supabase
       .from("quotes")

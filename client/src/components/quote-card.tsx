@@ -8,17 +8,20 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
-import { Quote as QuoteIcon, GraduationCap, School, Trash2, Pencil, User } from "lucide-react";
+import { Quote as QuoteIcon, GraduationCap, School, Trash2, Pencil, User, Calendar as CalendarIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface QuoteCardProps {
   quote: Quote;
   index: number;
   isAdmin?: boolean;
   onDelete?: (id: string) => void;
-  onEdit?: (id: string, data: { name?: string; text?: string; type?: string }) => void;
+  onEdit?: (id: string, data: { name?: string; text?: string; type?: string; timestamp?: number }) => void;
 }
 
 export function QuoteCard({ quote, index, isAdmin, onDelete, onEdit }: QuoteCardProps) {
@@ -26,6 +29,7 @@ export function QuoteCard({ quote, index, isAdmin, onDelete, onEdit }: QuoteCard
   const [editName, setEditName] = useState(quote.name);
   const [editText, setEditText] = useState(quote.text);
   const [editType, setEditType] = useState(quote.type);
+  const [editDate, setEditDate] = useState<Date>(new Date(quote.timestamp));
 
   const isTeacher = quote.type === "Teacher";
   const isStudent = quote.type === "Student";
@@ -37,6 +41,7 @@ export function QuoteCard({ quote, index, isAdmin, onDelete, onEdit }: QuoteCard
         name: editName,
         text: editText,
         type: editType,
+        timestamp: editDate.getTime(),
       });
     }
     setIsEditOpen(false);
@@ -46,6 +51,7 @@ export function QuoteCard({ quote, index, isAdmin, onDelete, onEdit }: QuoteCard
     setEditName(quote.name);
     setEditText(quote.text);
     setEditType(quote.type);
+    setEditDate(new Date(quote.timestamp));
     setIsEditOpen(true);
   };
 
@@ -139,27 +145,57 @@ export function QuoteCard({ quote, index, isAdmin, onDelete, onEdit }: QuoteCard
             <DialogTitle>Zitat bearbeiten</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-name">Name</Label>
-              <Input
-                id="edit-name"
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-                data-testid="input-edit-name"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-name">Name</Label>
+                <Input
+                  id="edit-name"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  data-testid="input-edit-name"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-type">Rolle</Label>
+                <Select value={editType} onValueChange={setEditType}>
+                  <SelectTrigger data-testid="select-edit-type">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="None">Keine</SelectItem>
+                    <SelectItem value="Student">Schüler</SelectItem>
+                    <SelectItem value="Teacher">Lehrer</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-type">Rolle</Label>
-              <Select value={editType} onValueChange={setEditType}>
-                <SelectTrigger data-testid="select-edit-type">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="None">Keine</SelectItem>
-                  <SelectItem value="Student">Schüler</SelectItem>
-                  <SelectItem value="Teacher">Lehrer</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label>Datum</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !editDate && "text-muted-foreground"
+                    )}
+                    data-testid="button-edit-date"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {editDate ? format(editDate, "d. MMM yyyy", { locale: de }) : "Datum wählen"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={editDate}
+                    onSelect={(date) => date && setEditDate(date)}
+                    disabled={(date) => date > new Date()}
+                    locale={de}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
             <div className="space-y-2">
               <Label htmlFor="edit-text">Zitat</Label>
